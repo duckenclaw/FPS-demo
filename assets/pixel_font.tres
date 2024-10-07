@@ -1,0 +1,4 @@
+[gd_resource type="SystemFont" format=3 uid="uid://cuht55tbb5ci8"]
+
+[resource]
+font_names = PackedStringArray("Pixeloid Mono")

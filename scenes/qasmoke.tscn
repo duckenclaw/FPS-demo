@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqquqxrfvhmmf"]
+
+[ext_resource type="PackedScene" uid="uid://d14l01a4sukoa" path="res://scenes/qasmoke_environment.tscn" id="1_cdwa6"]
+[ext_resource type="PackedScene" uid="uid://dl28g653atb6k" path="res://scenes/player.tscn" id="2_ddmjn"]
+
+[node name="Qasmoke" type="Node3D"]
+
+[node name="Environment" parent="." instance=ExtResource("1_cdwa6")]
+
+[node name="Player" parent="." instance=ExtResource("2_ddmjn")]
