@@ -39,10 +39,10 @@ roughness = 0.4
 [sub_resource type="PrismMesh" id="PrismMesh_0qmpt"]
 material = SubResource("StandardMaterial3D_4c08w")
 left_to_right = 1.0
-size = Vector3(2, 2, 1)
+size = Vector3(3, 2.025, 1)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gtarr"]
-points = PackedVector3Array(1, 1, 0.5, 1, 1, -0.5, -1, -1, 0.5, 1, -1, 0.5, 1, -1, -0.5, -1, -1, -0.5)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_62sh1"]
+points = PackedVector3Array(1.5, 1.0125, 0.5, 1.5, 1.0125, -0.5, -1.5, -1.0125, 0.5, 1.5, -1.0125, 0.5, 1.5, -1.0125, -0.5, -1.5, -1.0125, -0.5)
 
 [node name="QasmokeEnvironment" type="Node3D"]
 
@@ -72,7 +72,7 @@ mesh = SubResource("BoxMesh_343ot")
 shape = SubResource("BoxShape3D_ru58h")
 
 [node name="LowCeiling" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.1, 4)
 
 [node name="Mesh" type="MeshInstance3D" parent="LowCeiling"]
 mesh = SubResource("BoxMesh_343ot")
@@ -81,12 +81,12 @@ mesh = SubResource("BoxMesh_343ot")
 shape = SubResource("BoxShape3D_ru58h")
 
 [node name="Ramp" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 2, 2.08165e-12, 2.5)
+transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 2, 2.08165e-12, 2)
 
 [node name="Mesh" type="MeshInstance3D" parent="Ramp"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, -1.12238e-23, 0, -1.12238e-23, 1, 2.08165e-12, 1.025, 2.08165e-12)
 mesh = SubResource("PrismMesh_0qmpt")
 
 [node name="Collider" type="CollisionShape3D" parent="Ramp"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-shape = SubResource("ConvexPolygonShape3D_gtarr")
+transform = Transform3D(1, 0, 0, 0, 1, -1.12238e-23, 0, -1.12238e-23, 1, 2.08165e-12, 1.025, 2.08165e-12)
+shape = SubResource("ConvexPolygonShape3D_62sh1")

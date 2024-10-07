@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
-@onready var firstPersonCamera = $FirstPersonCamera
+@onready var firstPersonCamera: Camera3D = $FirstPersonCamera
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 const MAX_HP: int = 100
 const SPEED:float = 5.0
@@ -11,6 +12,7 @@ const MOUSE_SENSITIVITY:float = 0.05
 var hp: int
 
 var is_sprinting:bool = false
+var is_crouching:bool = false
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -34,6 +36,15 @@ func _input(event):
 		is_sprinting = true
 	else:
 		is_sprinting = false
+	
+	if Input.is_action_just_pressed("Crouch"):
+		if is_crouching:
+			is_crouching = false
+			anim_player.play("Uncrouch")
+		else:
+			is_crouching = true
+			anim_player.play("Crouch")
+
 
 
 func _physics_process(delta):
@@ -60,7 +71,6 @@ func _physics_process(delta):
 		if is_sprinting:
 			velocity.z = direction.z * SPRINT_SPEED
 			velocity.x = direction.x * SPRINT_SPEED
-			print(direction)
 		else:
 			velocity.z = direction.z * SPEED
 			velocity.x = direction.x * SPEED
