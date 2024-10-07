@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dl28g653atb6k"]
+[gd_scene load_steps=8 format=3 uid="uid://dl28g653atb6k"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x0crq"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3yqy3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5qotw"]
 
@@ -132,6 +134,7 @@ _data = {
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_x0crq")
+CameraShake_Noise = SubResource("FastNoiseLite_3yqy3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)

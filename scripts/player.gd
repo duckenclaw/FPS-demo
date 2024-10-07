@@ -4,10 +4,10 @@ extends CharacterBody3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 const MAX_HP: int = 100
-const SPEED:float = 5.0
-const SPRINT_SPEED:float = 7.0
-const JUMP_VELOCITY:float = 4.5
-const MOUSE_SENSITIVITY:float = 0.05
+const SPEED: float = 5.0
+const SPRINT_SPEED: float = 7.0
+const JUMP_VELOCITY: float = 4.5
+const MOUSE_SENSITIVITY: float = 0.05
 
 const DASH_SPEED: float = 15.0
 const DASH_DURATION: float = 0.3  # How long the dash lasts
@@ -96,11 +96,15 @@ func _physics_process(delta):
 	
 	# Apply camera shake
 	if cameraShake_Position.length() > 0.0001:
-		var noise : Vector3 = (Vector3(CameraShake_Noise.get_noise_1d(timeSinceStarted), CameraShake_Noise.get_noise_1d(timeSinceStarted + 1000), CameraShake_Noise.get_noise_1d(timeSinceStarted + 2000)) * CameraShake_NoiseStrength) * (cameraShake_Position.length() / CameraShake_MaxPower)
+		var noise = (Vector3(CameraShake_Noise.get_noise_1d(timeSinceStarted), CameraShake_Noise.get_noise_1d(timeSinceStarted + 1000), CameraShake_Noise.get_noise_1d(timeSinceStarted + 2000)) * CameraShake_NoiseStrength) * (cameraShake_Position.length() / CameraShake_MaxPower)
 		firstPersonCamera.position = firstPersonCamera.position.lerp(cameraShake_Position + noise, float(delta) * CameraShake_BlendSpeed)
 		cameraShake_Position = cameraShake_Position.lerp(Vector3.ZERO, delta * CameraShake_ReturnStrength)
 	else:
 		firstPersonCamera.position = Vector3.ZERO
+	
+	if Input.is_action_just_pressed("Jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+		ImpulseCamera(Vector3.UP, CameraShake_JumpingStrength);
 	
 	# Add gravity
 	if not is_on_floor():
@@ -124,6 +128,13 @@ func _physics_process(delta):
 		var stepBounce: float = (EaseInOutSine(-1.0, 1.0, timeSinceStarted * stepSpeed * 2.0 + 0.2) * -1.0) * WalkingSway_MaxSwayHandsHeight
 		
 		firstPersonCamera.position.y += (EaseInOutSine(-1.0, 1.0, timeSinceStarted * stepSpeed * 2.0 + 0.2) * -1.0) * WalkingSway_MaxSwayCameraHeight
+	
+	# Handle dash cooldown
+	if dash_uses < 2:
+		dash_cooldown_timer -= delta
+		if dash_cooldown_timer <= 0.0:
+			dash_cooldown_timer = DASH_COOLDOWN
+			dash_uses += 1
 	
 	# Handle dash logic
 	if is_dashing:
