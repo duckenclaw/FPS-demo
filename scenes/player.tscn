@@ -10,38 +10,38 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FirstPersonCamera:position")
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 1.75, 2.08165e-12), Vector3(2.08165e-12, 0.75, 2.08165e-12)]
+"values": [2.0, 1.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:shape:height")
+tracks/1/path = NodePath("CollisionShape3D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [2.0, 1.0]
+"values": [Vector3(2.08165e-12, 1, 2.08165e-12), Vector3(2.08165e-12, 0.5, 2.08165e-12)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/path = NodePath("CameraContainer:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 1, 2.08165e-12), Vector3(2.08165e-12, 0.5, 2.08165e-12)]
+"values": [Vector3(2.08165e-12, 1.75, 2.08165e-12), Vector3(2.08165e-12, 0.75, 2.08165e-12)]
 }
 
 [sub_resource type="Animation" id="Animation_uk7ky"]
@@ -49,38 +49,38 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FirstPersonCamera:position")
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 1.75, 2.08165e-12)]
+"values": [2.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:shape:height")
+tracks/1/path = NodePath("CollisionShape3D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [2.0]
+"values": [Vector3(2.08165e-12, 1, 2.08165e-12)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/path = NodePath("CameraContainer:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 1, 2.08165e-12)]
+"values": [Vector3(2.08165e-12, 1.75, 2.08165e-12)]
 }
 
 [sub_resource type="Animation" id="Animation_6fm5k"]
@@ -89,38 +89,38 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FirstPersonCamera:position")
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 0.75, 2.08165e-12), Vector3(2.08165e-12, 1.75, 2.08165e-12)]
+"values": [1.0, 2.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:shape:height")
+tracks/1/path = NodePath("CollisionShape3D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [1.0, 2.0]
+"values": [Vector3(2.08165e-12, 0.5, 2.08165e-12), Vector3(2.08165e-12, 1, 2.08165e-12)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/path = NodePath("CameraContainer:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 0.5, 2.08165e-12), Vector3(2.08165e-12, 1, 2.08165e-12)]
+"values": [Vector3(2.08165e-12, 0.75, 2.08165e-12), Vector3(2.08165e-12, 1.75, 2.08165e-12)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cnt6q"]
@@ -137,11 +137,14 @@ script = ExtResource("1_x0crq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
 shape = SubResource("CapsuleShape3D_5qotw")
 
-[node name="FirstPersonCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
-fov = 90.0
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_cnt6q")
 }
+
+[node name="CameraContainer" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
+
+[node name="FirstPersonCamera" type="Camera3D" parent="CameraContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
+fov = 90.0
