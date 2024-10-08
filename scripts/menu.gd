@@ -1,19 +1,13 @@
 extends Control
 
-@onready var test_scene = preload("res://scenes/qasmoke.tscn")
+@onready var main_screen = $MainMenu
+@onready var options_screen = $OptionsMenu
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-func _on_start_pressed():
-	get_tree().change_scene_to_packed(test_scene)
+func _on_main_menu_open_options():
+	main_screen.visible = false
+	options_screen.visible = true
 
 
-func _on_options_pressed():
-	pass # Replace with function body.
-
-
-func _on_exit_pressed():
-	get_tree().quit()
+func _on_options_menu_close_options():
+	options_screen.visible = false
+	main_screen.visible = true

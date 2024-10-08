@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://6660oo4mo8ec"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_ooj8e"]
+[ext_resource type="Texture2D" uid="uid://imnd4hla48bw" path="res://assets/background.png" id="2_yb0fj"]
+[ext_resource type="PackedScene" uid="uid://pcxb5dvt1qx5" path="res://scenes/UI/Screens/main_menu.tscn" id="3_7xbiw"]
+[ext_resource type="PackedScene" uid="uid://2mivuge7xd21" path="res://scenes/UI/Screens/options_menu.tscn" id="4_puelc"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ooj8e")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.678431, 0.678431, 0.678431, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_yb0fj")
+expand_mode = 2
+
+[node name="MainMenu" parent="." instance=ExtResource("3_7xbiw")]
+layout_mode = 1
+
+[node name="OptionsMenu" parent="." instance=ExtResource("4_puelc")]
+visible = false
+layout_mode = 1
+
+[connection signal="open_options" from="MainMenu" to="." method="_on_main_menu_open_options"]
+[connection signal="close_options" from="OptionsMenu" to="." method="_on_options_menu_close_options"]
