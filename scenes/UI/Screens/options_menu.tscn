@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://2mivuge7xd21"]
 
 [ext_resource type="Script" path="res://scripts/options_menu.gd" id="1_6n235"]
-[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/pixel_font.tres" id="1_h7ee6"]
+[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="1_h7ee6"]
 [ext_resource type="PackedScene" uid="uid://dr3ryu6logvm2" path="res://scenes/UI/Components/rebind_container.tscn" id="3_ldete"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1a3te"]

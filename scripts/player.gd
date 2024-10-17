@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @onready var firstPersonCamera: Camera3D = $CameraContainer/FirstPersonCamera
+@onready var weaponsCamera: Camera3D = $CanvasLayer/SubViewportContainer/SubViewport/SubViewportCamera
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 const MAX_HP: int = 100
@@ -57,6 +58,9 @@ func _ready():
 func _input(event):
 	_handle_camera_input(event)
 	_handle_misc_input()
+
+func _process(delta):
+	weaponsCamera.global_transform = (firstPersonCamera.global_transform)
 
 func _physics_process(delta):
 	timeSinceStarted += delta * CameraShake_NoisePanningSpeed

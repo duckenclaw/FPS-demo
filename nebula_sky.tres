@@ -1,0 +1,15 @@
+[gd_resource type="Sky" load_steps=4 format=3 uid="uid://qlmrokfcnlcu"]
+
+[ext_resource type="Shader" path="res://nebula.gdshader" id="1_vl656"]
+[ext_resource type="Texture2D" uid="uid://c0rqwitbr5el4" path="res://assets/images/result1.png" id="2_eo6nm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0yhcx"]
+shader = ExtResource("1_vl656")
+shader_parameter/x_tiles = 1.0
+shader_parameter/y_tiles = 1.0
+shader_parameter/pole_fading = 2.0
+shader_parameter/transparency = 1.0
+shader_parameter/nebula_image = ExtResource("2_eo6nm")
+
+[resource]
+sky_material = SubResource("ShaderMaterial_0yhcx")

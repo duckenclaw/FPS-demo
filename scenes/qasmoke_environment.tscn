@@ -1,8 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://d14l01a4sukoa"]
+[gd_scene load_steps=13 format=3 uid="uid://d14l01a4sukoa"]
+
+[ext_resource type="Sky" uid="uid://qlmrokfcnlcu" path="res://nebula_sky.tres" id="1_2fxfs"]
 
 [sub_resource type="Environment" id="Environment_cd3k1"]
-background_mode = 1
+background_mode = 2
 background_color = Color(0.529412, 0.807843, 0.921569, 1)
+sky = ExtResource("1_2fxfs")
+sky_rotation = Vector3(3.48787e-16, 3.48787e-16, 3.48787e-16)
+ambient_light_source = 3
+ambient_light_color = Color(0.152941, 0.364706, 0.607843, 1)
+reflected_light_source = 2
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_nwbmh"]
 

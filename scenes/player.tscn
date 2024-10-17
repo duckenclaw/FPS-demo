@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dl28g653atb6k"]
+[gd_scene load_steps=10 format=3 uid="uid://dl28g653atb6k"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x0crq"]
+[ext_resource type="ArrayMesh" uid="uid://bjxsflj1uxlmu" path="res://assets/models/sci-fi-sword.res" id="2_1kmoi"]
+[ext_resource type="ArrayMesh" uid="uid://d2kqapxqvrj53" path="res://assets/models/sci-fi-pistol.res" id="3_bqvjn"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_3yqy3"]
 
@@ -12,7 +14,7 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/path = NodePath("Collider:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -24,7 +26,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/path = NodePath("Collider:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -51,7 +53,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/path = NodePath("Collider:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -63,7 +65,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/path = NodePath("Collider:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -91,7 +93,7 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/path = NodePath("Collider:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -103,7 +105,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/path = NodePath("Collider:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -136,7 +138,26 @@ _data = {
 script = ExtResource("1_x0crq")
 CameraShake_Noise = SubResource("FastNoiseLite_3yqy3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
+transparent_bg = true
+size = Vector2i(1600, 900)
+
+[node name="SubViewportCamera" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
+cull_mask = 524288
+fov = 100.0
+
+[node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
 shape = SubResource("CapsuleShape3D_5qotw")
 
@@ -149,5 +170,18 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
 
 [node name="FirstPersonCamera" type="Camera3D" parent="CameraContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+cull_mask = 524287
 fov = 90.0
+
+[node name="WeaponPivot" type="Node3D" parent="CameraContainer/FirstPersonCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, -1, -0.5)
+
+[node name="Gun" type="MeshInstance3D" parent="CameraContainer/FirstPersonCamera/WeaponPivot"]
+layers = 524288
+mesh = ExtResource("3_bqvjn")
+
+[node name="Sword" type="MeshInstance3D" parent="CameraContainer/FirstPersonCamera/WeaponPivot"]
+transform = Transform3D(1.4375, -0.408679, 0.128747, 0.38233, 1.42688, 0.260472, -0.193438, -0.216803, 1.47159, -0.15, 0.5, -0.25)
+layers = 524288
+mesh = ExtResource("2_1kmoi")
