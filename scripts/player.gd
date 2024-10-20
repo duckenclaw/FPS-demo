@@ -3,12 +3,17 @@ extends CharacterBody3D
 @onready var firstPersonCamera: Camera3D = $CameraContainer/FirstPersonCamera
 @onready var weaponsCamera: Camera3D = $CanvasLayer/SubViewportContainer/SubViewport/SubViewportCamera
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var primary_weapon: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Sword
+@onready var primary_weapon_hitbox: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Sword/Hitbox
+@onready var secondary_weapon: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Gun
 
 const MAX_HP: int = 100
 const SPEED: float = 5.0
 const SPRINT_SPEED: float = 7.0
 const JUMP_VELOCITY: float = 4.5
 const MOUSE_SENSITIVITY: float = 0.05
+const MELEE_DAMAGE: int = 75
+const RANGED_DAMAGE: int = 25
 
 const DASH_SPEED: float = 15.0
 const DASH_DURATION: float = 0.3  # How long the dash lasts
@@ -18,8 +23,8 @@ var hp: int
 var dash_uses: int = 2
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
-var is_dashing: bool = false
 
+var is_dashing: bool = false
 var is_sprinting: bool = false
 var is_crouching: bool = false
 
@@ -56,8 +61,8 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
-	_handle_camera_input(event)
-	_handle_misc_input()
+	handle_camera_input(event)
+	handle_misc_input()
 
 func _process(delta):
 	weaponsCamera.global_transform = (firstPersonCamera.global_transform)
@@ -79,7 +84,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 # Handle camera input
-func _handle_camera_input(event):
+func handle_camera_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		firstPersonCamera.rotate_x(deg_to_rad(event.relative.y * MOUSE_SENSITIVITY * -1))
 		self.rotate_y(deg_to_rad(event.relative.x * MOUSE_SENSITIVITY * -1))
@@ -89,10 +94,19 @@ func _handle_camera_input(event):
 		firstPersonCamera.rotation_degrees = camera_rot
 
 # Handle sprinting, crouching, and dash input
-func _handle_misc_input():
+func handle_misc_input():
 	if Input.is_action_just_pressed("ui_cancel"):
 		toggle_mouse_mode()
 
+	if Input.is_action_just_pressed("Change"):
+		change_weapon()
+		
+	if Input.is_action_just_pressed("Attack"):
+		if primary_weapon.visible:
+			primary_attack()
+		elif secondary_weapon.visible:
+			secondary_attack()
+	
 	if Input.is_action_pressed("Sprint"):
 		is_sprinting = true
 	else:
@@ -161,6 +175,28 @@ func handle_dash_cooldown(delta: float):
 			dash_cooldown_timer = DASH_COOLDOWN
 			dash_uses += 1
 
+func primary_attack():
+	primary_weapon_hitbox.monitoring = true
+	anim_player.play("Right Slash")
+
+func secondary_attack():
+	pass
+
+func take_damage(damage):
+	anim_player.play("Hit")
+	print(self.name + " took " + str(damage) + " damage")
+	print("HP: " + str(hp) + " - " + str(damage) + " = " + str(hp - damage))
+	hp = hp - damage
+	print("HP: " + str(MAX_HP) + "/" + str(hp))
+
+func change_weapon():
+	if primary_weapon.visible:
+		primary_weapon.visible = false
+		secondary_weapon.visible = true
+	elif secondary_weapon.visible:
+		secondary_weapon.visible = false
+		primary_weapon.visible = true
+
 # Handle jump input
 func handle_jump():
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
@@ -208,3 +244,12 @@ func ImpulseCamera(impulseVector: Vector3, impulsePower: float):
 func EaseInOutSine(start: float, end: float, value: float) -> float:
 	end -= start
 	return -end * 0.5 * (cos(PI * value) - 1.0) + start
+
+func _on_primary_weapon_hitbox_entered(area):
+	if area.is_in_group("enemy"):
+		area.take_damage(MELEE_DAMAGE)
+
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "Right Slash":
+		primary_weapon_hitbox.monitoring = false
+		anim_player.play("Idle", 0.5)
