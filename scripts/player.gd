@@ -27,6 +27,9 @@ var dash_cooldown_timer: float = 0.0
 var is_dashing: bool = false
 var is_sprinting: bool = false
 var is_crouching: bool = false
+var is_blocking: bool = false
+
+signal blocked
 
 # Camera Shake and Walking Sway Variables
 @export_category("Camera Shake")
@@ -101,10 +104,16 @@ func handle_misc_input():
 	if Input.is_action_just_pressed("Change"):
 		change_weapon()
 		
-	if Input.is_action_just_pressed("Attack"):
-		if primary_weapon.visible:
+	if primary_weapon.visible:
+		if Input.is_action_just_pressed("Attack"):
 			primary_attack()
-		elif secondary_weapon.visible:
+		if Input.is_action_just_pressed("Alt Attack"):
+			primary_alt_attack()
+		elif Input.is_action_just_released("Alt Attack"):
+			anim_player.play("Idle", 0.3)
+			is_blocking = false
+	elif secondary_weapon.visible:
+		if Input.is_action_just_pressed("Attack"):
 			secondary_attack()
 	
 	if Input.is_action_pressed("Sprint"):
@@ -177,17 +186,33 @@ func handle_dash_cooldown(delta: float):
 
 func primary_attack():
 	primary_weapon_hitbox.monitoring = true
-	anim_player.play("Right Slash")
+	if anim_player.current_animation == "Idle":
+		anim_player.play("Right Slash")
+	elif anim_player.current_animation == "Right Slash":
+		anim_player.queue("Left Slash")
+	elif anim_player.current_animation == "Left Slash":
+		anim_player.queue("Upper Slash")
+	elif anim_player.current_animation == "Upper Slash":
+		anim_player.queue("Right Slash")
+
+func primary_alt_attack():
+	is_blocking = true
+	anim_player.play("Block")
 
 func secondary_attack():
 	pass
+	
+func secondary_alt_attack():
+	pass
 
 func take_damage(damage):
-	anim_player.play("Hit")
-	print(self.name + " took " + str(damage) + " damage")
-	print("HP: " + str(hp) + " - " + str(damage) + " = " + str(hp - damage))
-	hp = hp - damage
-	print("HP: " + str(MAX_HP) + "/" + str(hp))
+	if is_blocking:
+		pass
+	else:
+		print(self.name + " took " + str(damage) + " damage")
+		print("HP: " + str(hp) + " - " + str(damage) + " = " + str(hp - damage))
+		hp = hp - damage
+		print("HP: " + str(MAX_HP) + "/" + str(hp))
 
 func change_weapon():
 	if primary_weapon.visible:
@@ -250,6 +275,6 @@ func _on_primary_weapon_hitbox_entered(area):
 		area.take_damage(MELEE_DAMAGE)
 
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "Right Slash":
+	if anim_name == "Right Slash" or anim_name == "Left Slash" or anim_name == "Upper Slash":
 		primary_weapon_hitbox.monitoring = false
 		anim_player.play("Idle", 0.5)
