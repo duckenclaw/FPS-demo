@@ -1,11 +1,16 @@
 extends CharacterBody3D
 
-@onready var firstPersonCamera: Camera3D = $CameraContainer/FirstPersonCamera
 @onready var weaponsCamera: Camera3D = $CanvasLayer/SubViewportContainer/SubViewport/SubViewportCamera
+@onready var firstPersonCamera: Camera3D = $CameraContainer/FirstPersonCamera
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var primary_weapon: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Sword
 @onready var primary_weapon_hitbox: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Sword/Hitbox
 @onready var secondary_weapon: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Gun
+@onready var secondary_weapon_gunpoint: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Gun/Gunpoint
+@onready var crosshair_raycast: RayCast3D = $CameraContainer/FirstPersonCamera/WeaponPivot/CrosshairRaycast
+@onready var hud: Control = $CanvasLayer/SubViewportContainer/SubViewport/Hud
+
+@onready var projectile_scene = preload("res://scenes/bullet.tscn")
 
 const MAX_HP: int = 100
 const SPEED: float = 5.0
@@ -28,6 +33,7 @@ var is_dashing: bool = false
 var is_sprinting: bool = false
 var is_crouching: bool = false
 var is_blocking: bool = false
+var is_shooting: bool = false
 
 signal blocked
 
@@ -61,6 +67,9 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _ready():
 	hp = MAX_HP
+	hud.max_health = MAX_HP
+	hud.update_health(hp)
+	hud.update_dash(dash_uses)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
@@ -99,12 +108,12 @@ func handle_camera_input(event):
 # Handle sprinting, crouching, and dash input
 func handle_misc_input():
 	if Input.is_action_just_pressed("ui_cancel"):
-		toggle_mouse_mode()
+		hud.toggle_pause()
 
 	if Input.is_action_just_pressed("Change"):
 		change_weapon()
 		
-	if primary_weapon.visible:
+	if primary_weapon.visible and Engine.time_scale != 0:
 		if Input.is_action_just_pressed("Attack"):
 			primary_attack()
 		if Input.is_action_just_pressed("Alt Attack"):
@@ -112,7 +121,7 @@ func handle_misc_input():
 		elif Input.is_action_just_released("Alt Attack"):
 			anim_player.play("Idle", 0.3)
 			is_blocking = false
-	elif secondary_weapon.visible:
+	elif secondary_weapon.visible and Engine.time_scale != 0:
 		if Input.is_action_just_pressed("Attack"):
 			secondary_attack()
 	
@@ -126,13 +135,6 @@ func handle_misc_input():
 
 	if Input.is_action_just_pressed("Dash") and dash_uses > 0 and not is_dashing:
 		start_dash()
-
-# Toggle mouse mode
-func toggle_mouse_mode():
-	if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 # Toggle crouch animation
 func toggle_crouch():
@@ -183,6 +185,7 @@ func handle_dash_cooldown(delta: float):
 		if dash_cooldown_timer <= 0.0:
 			dash_cooldown_timer = DASH_COOLDOWN
 			dash_uses += 1
+	hud.update_dash(dash_uses)
 
 func primary_attack():
 	primary_weapon_hitbox.monitoring = true
@@ -200,8 +203,11 @@ func primary_alt_attack():
 	anim_player.play("Block")
 
 func secondary_attack():
-	pass
-	
+	if !is_shooting:
+		anim_player.play("Shoot")
+		var projectile = projectile_scene.instantiate()
+		secondary_weapon_gunpoint.add_child(projectile)
+
 func secondary_alt_attack():
 	pass
 
@@ -213,6 +219,7 @@ func take_damage(damage):
 		print("HP: " + str(hp) + " - " + str(damage) + " = " + str(hp - damage))
 		hp = hp - damage
 		print("HP: " + str(MAX_HP) + "/" + str(hp))
+	hud.update_health(hp)
 
 func change_weapon():
 	if primary_weapon.visible:
@@ -278,3 +285,5 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "Right Slash" or anim_name == "Left Slash" or anim_name == "Upper Slash":
 		primary_weapon_hitbox.monitoring = false
 		anim_player.play("Idle", 0.5)
+	if anim_name == "Shoot":
+		is_shooting = false

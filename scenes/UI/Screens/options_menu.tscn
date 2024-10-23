@@ -102,12 +102,12 @@ layout_mode = 2
 size_flags_horizontal = 1
 action = "Crouch"
 
-[node name="Exit" type="Button" parent="VBoxContainer"]
+[node name="Back" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_fonts/font = ExtResource("1_h7ee6")
 action_mode = 0
-text = "Exit"
+text = "Back"
 
-[connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]

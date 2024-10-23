@@ -1,0 +1,107 @@
+[gd_scene load_steps=8 format=3 uid="uid://cmurm1bxryavs"]
+
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="1_g3e6p"]
+[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="1_q8k13"]
+[ext_resource type="PackedScene" uid="uid://41niqnirikob" path="res://scenes/UI/pause_menu.tscn" id="3_wp4ff"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vvypr"]
+bg_color = Color(0.219608, 0.00784314, 0.0156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4tbre"]
+bg_color = Color(0.658824, 0.0705882, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5r68"]
+bg_color = Color(0, 0.160784, 0.203922, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rwqbp"]
+bg_color = Color(0, 0.396078, 0.482353, 1)
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g3e6p")
+
+[node name="Margins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 60
+
+[node name="Stats" type="VBoxContainer" parent="Margins"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 14
+
+[node name="HealthBar" type="ProgressBar" parent="Margins/Stats"]
+custom_minimum_size = Vector2(360, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_vvypr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4tbre")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="Margins" type="MarginContainer" parent="Margins/Stats/HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="Health" type="Label" parent="Margins/Stats/HealthBar/Margins"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("1_q8k13")
+theme_override_font_sizes/font_size = 20
+text = "100/100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DashBar" type="ProgressBar" parent="Margins/Stats"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_o5r68")
+theme_override_styles/fill = SubResource("StyleBoxFlat_rwqbp")
+max_value = 2.0
+step = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="Margins" type="MarginContainer" parent="Margins/Stats/DashBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_right = 14
+
+[node name="DashCharges" type="Label" parent="Margins/Stats/DashBar/Margins"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("1_q8k13")
+text = "1"
+
+[node name="PauseMenu" parent="." instance=ExtResource("3_wp4ff")]
+visible = false
+layout_mode = 1
+
+[connection signal="unpause" from="PauseMenu" to="." method="_on_pause_menu_unpause"]
