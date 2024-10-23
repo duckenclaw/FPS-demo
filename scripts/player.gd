@@ -206,7 +206,9 @@ func secondary_attack():
 	if !is_shooting:
 		anim_player.play("Shoot")
 		var projectile = projectile_scene.instantiate()
-		secondary_weapon_gunpoint.add_child(projectile)
+		projectile.position = secondary_weapon_gunpoint.global_position
+		projectile.transform.basis = secondary_weapon_gunpoint.global_transform.basis
+		get_parent().add_child(projectile)
 
 func secondary_alt_attack():
 	pass
@@ -287,3 +289,4 @@ func _on_animation_player_animation_finished(anim_name):
 		anim_player.play("Idle", 0.5)
 	if anim_name == "Shoot":
 		is_shooting = false
+		anim_player.play("Idle", 0.5)
