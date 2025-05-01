@@ -16,6 +16,11 @@ const MAX_HP: int = 100
 const SPEED: float = 5.0
 const SPRINT_SPEED: float = 7.0
 const JUMP_VELOCITY: float = 4.5
+const HIGHJUMP_VELOCITY: float = 6.5
+const DOUBLE_JUMP_VELOCITY: float = 4.0
+const GLIDE_FALL_SPEED: float = 2.0
+const HIGHJUMP_TIME: float = 0.5
+const CHARGE_SPEED: float = 15.0
 const MOUSE_SENSITIVITY: float = 0.05
 const MELEE_DAMAGE: int = 75
 const RANGED_DAMAGE: int = 25
@@ -32,6 +37,12 @@ var hp: int
 var dash_uses: int = 2
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
+var jump_hold_timer: float = 0.0
+var can_double_jump: bool = true
+var is_charging: bool = false
+var charge_direction: Vector3 = Vector3.ZERO
+var is_gliding: bool = false
+var is_holding_jump: bool = false
 
 var input_buffer: Array = []
 var input_times: Array = []
@@ -94,6 +105,11 @@ func _physics_process(delta):
 	
 	apply_camera_shake(delta)
 	handle_jump()
+	
+	if is_on_floor():
+		can_double_jump = true
+		is_gliding = false
+	
 	apply_gravity(delta)
 	apply_walking_sway(delta)
 	handle_dash_cooldown(delta)
@@ -154,16 +170,29 @@ func handle_misc_input():
 		if Input.is_action_just_pressed("Attack"):
 			secondary_attack()
 	
-	if Input.is_action_pressed("Sprint"):
-		is_sprinting = true
-	else:
-		is_sprinting = false
+	handle_dash_input()
 	
 	if Input.is_action_just_pressed("Crouch"):
 		toggle_crouch()
 
-	if Input.is_action_just_pressed("Dash") and dash_uses > 0 and not is_dashing:
+func handle_dash_input():
+	var input_dir = Input.get_vector("Left", "Right", "Forwards", "Backwards")
+	var is_moving_forward = input_dir.y < 0  # Note: Forward is negative in Godot's input system
+	
+	if Input.is_action_just_pressed("Dash") and dash_uses > 0 and not is_dashing and not is_charging:
 		start_dash()
+	
+	if Input.is_action_pressed("Dash"):
+		if is_moving_forward:
+			is_sprinting = true
+		else:
+			is_sprinting = false
+	else:
+		is_sprinting = false
+	
+	if Input.is_action_just_released("Dash") and not is_dashing:
+		if not is_moving_forward and dash_uses > 0:
+			start_charge()
 
 # Toggle crouch animation
 func toggle_crouch():
@@ -174,13 +203,19 @@ func toggle_crouch():
 		is_crouching = true
 		anim_player.play("Crouch")
 
-# Start dash
+func start_charge():
+	is_charging = true
+	dash_uses -= 1
+	dash_timer = DASH_DURATION
+	# Get the forward direction of the camera
+	charge_direction = -firstPersonCamera.global_transform.basis.z
+	charge_direction = charge_direction.normalized()
+
 func start_dash():
 	is_dashing = true
 	dash_timer = DASH_DURATION
 	dash_uses -= 1
 
-# Dash movement
 func dash(delta: float):
 	dash_timer -= delta
 	if dash_timer > 0.0:
@@ -192,8 +227,17 @@ func dash(delta: float):
 	else:
 		is_dashing = false
 
-# Normal movement
 func move(delta: float):
+	if is_charging:
+		dash_timer -= delta
+		if dash_timer > 0.0:
+			velocity.x = charge_direction.x * CHARGE_SPEED
+			velocity.z = charge_direction.z * CHARGE_SPEED
+			velocity.y = charge_direction.y * CHARGE_SPEED
+		else:
+			is_charging = false
+		return
+		
 	var input_dir = Input.get_vector("Left", "Right", "Forwards", "Backwards")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
@@ -329,9 +373,32 @@ func change_weapon():
 
 # Handle jump input
 func handle_jump():
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		ImpulseCamera(Vector3.UP, CameraShake_JumpingStrength)
+	if Input.is_action_just_pressed("Jump"):
+		if is_on_floor():
+			is_holding_jump = true
+			jump_hold_timer = 0.0
+	
+	if Input.is_action_pressed("Jump"):
+		if is_holding_jump and is_on_floor():
+			jump_hold_timer += get_physics_process_delta_time()
+		elif not is_on_floor():
+			is_gliding = true
+			if velocity.y < -GLIDE_FALL_SPEED:
+				velocity.y = -GLIDE_FALL_SPEED
+	
+	if Input.is_action_just_released("Jump"):
+		if is_holding_jump and is_on_floor():
+			if jump_hold_timer >= HIGHJUMP_TIME:
+				velocity.y = HIGHJUMP_VELOCITY
+			else:
+				velocity.y = JUMP_VELOCITY
+			is_holding_jump = false
+			ImpulseCamera(Vector3.UP, CameraShake_JumpingStrength)
+		elif can_double_jump:
+			velocity.y = DOUBLE_JUMP_VELOCITY
+			can_double_jump = false
+			ImpulseCamera(Vector3.UP, CameraShake_JumpingStrength)
+		is_gliding = false
 
 # Apply gravity
 func apply_gravity(delta: float):
