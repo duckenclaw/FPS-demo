@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@onready var weaponsCamera: Camera3D = $CanvasLayer/SubViewportContainer/SubViewport/SubViewportCamera
+@onready var weaponsCamera: Camera3D = $HUD/SubViewportContainer/SubViewport/SubViewportCamera
 @onready var firstPersonCamera: Camera3D = $CameraContainer/FirstPersonCamera
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var primary_weapon: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Sword
@@ -8,7 +8,7 @@ extends CharacterBody3D
 @onready var secondary_weapon: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Gun
 @onready var secondary_weapon_gunpoint: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Gun/Gunpoint
 @onready var crosshair_raycast: RayCast3D = $CameraContainer/FirstPersonCamera/WeaponPivot/CrosshairRaycast
-@onready var hud: Control = $CanvasLayer/SubViewportContainer/SubViewport/Hud
+@onready var hud: Control = $HUD/SubViewportContainer/SubViewport/HudUI
 
 @onready var projectile_scene = preload("res://scenes/bullet.tscn")
 
@@ -24,10 +24,19 @@ const DASH_SPEED: float = 15.0
 const DASH_DURATION: float = 0.3  # How long the dash lasts
 const DASH_COOLDOWN: float = 1.0  # Time between dash recharge
 
+# Input Buffer System
+const INPUT_BUFFER_TIME: float = 0.5  # Time window for input buffer in seconds
+const CHARGE_BUFFER_TIME: float = 0.3  # Time window for charge moves
+
 var hp: int
 var dash_uses: int = 2
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
+
+var input_buffer: Array = []
+var input_times: Array = []
+var last_direction: String = ""
+var direction_change_time: float = 0.0
 
 var is_dashing: bool = false
 var is_sprinting: bool = false
@@ -74,6 +83,7 @@ func _ready():
 
 func _input(event):
 	handle_camera_input(event)
+	handle_movement_input(event)
 	handle_misc_input()
 
 func _process(delta):
@@ -104,6 +114,25 @@ func handle_camera_input(event):
 		var camera_rot = firstPersonCamera.rotation_degrees
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		firstPersonCamera.rotation_degrees = camera_rot
+
+# Handle movement input for input buffer
+func handle_movement_input(event):
+	if event.is_action_pressed("Forwards"):
+		add_to_input_buffer("W")
+		last_direction = "forward"
+		direction_change_time = Time.get_ticks_msec() / 1000.0
+	elif event.is_action_pressed("Backwards"):
+		add_to_input_buffer("S")
+		last_direction = "backward"
+		direction_change_time = Time.get_ticks_msec() / 1000.0
+	elif event.is_action_pressed("Left"):
+		add_to_input_buffer("A")
+		last_direction = "left"
+		direction_change_time = Time.get_ticks_msec() / 1000.0
+	elif event.is_action_pressed("Right"):
+		add_to_input_buffer("D")
+		last_direction = "right"
+		direction_change_time = Time.get_ticks_msec() / 1000.0
 
 # Handle sprinting, crouching, and dash input
 func handle_misc_input():
@@ -187,16 +216,83 @@ func handle_dash_cooldown(delta: float):
 			dash_uses += 1
 	hud.update_dash(dash_uses)
 
+func add_to_input_buffer(input: String):
+	var current_time = Time.get_ticks_msec() / 1000.0
+	
+	# Remove old inputs
+	while input_buffer.size() > 0 and current_time - input_times[0] > INPUT_BUFFER_TIME:
+		input_buffer.pop_front()
+		input_times.pop_front()
+	
+	# Add new input
+	input_buffer.append(input)
+	input_times.append(current_time)
+
+func check_circular_motion() -> bool:
+	if input_buffer.size() < 4:
+		return false
+	
+	var circular_patterns = [
+		["W", "A", "S", "D"],
+		["A", "S", "D", "W"],
+		["S", "D", "W", "A"],
+		["D", "W", "A", "S"]
+	]
+	
+	var last_four = input_buffer.slice(-4)
+	for pattern in circular_patterns:
+		if arrays_match(last_four, pattern):
+			return true
+	
+	return false
+
+func arrays_match(arr1: Array, arr2: Array) -> bool:
+	if arr1.size() != arr2.size():
+		return false
+	
+	for i in range(arr1.size()):
+		if arr1[i] != arr2[i]:
+			return false
+	
+	return true
+
+func determine_move_type() -> String:
+	var current_time = Time.get_ticks_msec() / 1000.0
+	
+	if check_circular_motion():
+		print("executed Swirl")
+		return "Swirl"
+	
+	# Check for thrust attack (Forward-Backward or Backward-Forward)
+	if input_buffer.size() >= 2:
+		var last_two = input_buffer.slice(-2)
+		if (last_two[0] == "W" and last_two[1] == "S") or \
+		   (last_two[0] == "S" and last_two[1] == "W"):
+			print("executed Thrust")
+			return "Thrust"
+	
+	# Check for directional attacks
+	if input_buffer.size() > 0:
+		match input_buffer[-1]:
+			"W":
+				return "Upper Slash"
+			"S":
+				print("executed Bottom Slash")
+				return "Bottom Slash"
+			"A":
+				return "Left Slash"
+			"D":
+				return "Right Slash"
+			
+	
+	# Default to regular attack (thrust)
+	return "Thrust"
+
 func primary_attack():
 	primary_weapon_hitbox.monitoring = true
-	if anim_player.current_animation == "Idle":
-		anim_player.play("Right Slash")
-	elif anim_player.current_animation == "Right Slash":
-		anim_player.queue("Left Slash")
-	elif anim_player.current_animation == "Left Slash":
-		anim_player.queue("Upper Slash")
-	elif anim_player.current_animation == "Upper Slash":
-		anim_player.queue("Right Slash")
+	var move_type = determine_move_type()
+	
+	anim_player.play(move_type)
 
 func primary_alt_attack():
 	is_blocking = true
@@ -284,7 +380,7 @@ func _on_primary_weapon_hitbox_entered(area):
 		area.take_damage(MELEE_DAMAGE)
 
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "Right Slash" or anim_name == "Left Slash" or anim_name == "Upper Slash":
+	if anim_name in ["Right Slash", "Left Slash", "Upper Slash"]:
 		primary_weapon_hitbox.monitoring = false
 		anim_player.play("Idle", 0.5)
 	if anim_name == "Shoot":

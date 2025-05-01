@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x0crq"]
 [ext_resource type="ArrayMesh" uid="uid://bjxsflj1uxlmu" path="res://assets/models/sci-fi-sword.res" id="2_1kmoi"]
-[ext_resource type="PackedScene" uid="uid://cmurm1bxryavs" path="res://scenes/UI/HUD.tscn" id="2_kvywq"]
+[ext_resource type="PackedScene" uid="uid://cxv87hkqg37a1" path="res://scenes/hud.tscn" id="2_kjj2p"]
 [ext_resource type="ArrayMesh" uid="uid://d2kqapxqvrj53" path="res://assets/models/sci-fi-pistol.res" id="3_bqvjn"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_3yqy3"]
@@ -341,28 +341,7 @@ points = PackedVector3Array(-0.0176665, 0.936987, -0.0670899, 0.00521253, 0.0785
 script = ExtResource("1_x0crq")
 CameraShake_Noise = SubResource("FastNoiseLite_3yqy3")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(1600, 900)
-render_target_update_mode = 4
-
-[node name="Hud" parent="CanvasLayer/SubViewportContainer/SubViewport" instance=ExtResource("2_kvywq")]
-
-[node name="SubViewportCamera" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
-cull_mask = 524288
-fov = 100.0
+[node name="HUD" parent="." instance=ExtResource("2_kjj2p")]
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)

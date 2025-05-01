@@ -1,14 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqquqxrfvhmmf"]
+[gd_scene load_steps=4 format=3 uid="uid://bmlqwjikm1uyb"]
 
 [ext_resource type="PackedScene" uid="uid://d14l01a4sukoa" path="res://scenes/qasmoke_environment.tscn" id="1_cdwa6"]
-[ext_resource type="PackedScene" uid="uid://dl28g653atb6k" path="res://scenes/player.tscn" id="2_ddmjn"]
-[ext_resource type="PackedScene" uid="uid://gksvg4e1qu24" path="res://scenes/alien.tscn" id="3_681qp"]
+[ext_resource type="PackedScene" uid="uid://dl28g653atb6k" path="res://scenes/player.tscn" id="2_1swku"]
+[ext_resource type="PackedScene" uid="uid://gksvg4e1qu24" path="res://scenes/alien.tscn" id="3_dyyog"]
 
 [node name="Qasmoke" type="Node3D"]
 
-[node name="Environment" parent="." instance=ExtResource("1_cdwa6")]
+[node name="QasmokeEnvironment" parent="." instance=ExtResource("1_cdwa6")]
 
-[node name="Player" parent="." instance=ExtResource("2_ddmjn")]
+[node name="Player" parent="." instance=ExtResource("2_1swku")]
 
-[node name="alien" parent="." instance=ExtResource("3_681qp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, -4)
+[node name="alien" parent="." instance=ExtResource("3_dyyog")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22679, 1.14553e-07, -3.6292)
