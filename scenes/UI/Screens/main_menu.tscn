@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://pcxb5dvt1qx5"]
 
-[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="1_8wixw"]
-[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_q3w2n"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_4hpj4"]
+[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="2_6av1o"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_7gpcc"]
-font = ExtResource("1_8wixw")
+font = ExtResource("2_6av1o")
 font_size = 36
 
 [node name="MainMenu" type="MarginContainer"]
@@ -17,7 +17,7 @@ theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 36
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 36
-script = ExtResource("1_q3w2n")
+script = ExtResource("1_4hpj4")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
@@ -39,21 +39,21 @@ alignment = 1
 [node name="Start" type="Button" parent="ButtonsContainer"]
 custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_8wixw")
+theme_override_fonts/font = ExtResource("2_6av1o")
 theme_override_font_sizes/font_size = 24
 text = "Start"
 
 [node name="Options" type="Button" parent="ButtonsContainer"]
 custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_8wixw")
+theme_override_fonts/font = ExtResource("2_6av1o")
 theme_override_font_sizes/font_size = 24
 text = "Options"
 
 [node name="Exit" type="Button" parent="ButtonsContainer"]
 custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("1_8wixw")
+theme_override_fonts/font = ExtResource("2_6av1o")
 theme_override_font_sizes/font_size = 24
 text = "Exit"
 

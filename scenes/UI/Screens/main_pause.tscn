@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cqx3f4ayahjmc"]
 
-[ext_resource type="Script" path="res://scripts/main_pause.gd" id="1_diw61"]
-[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="1_pbkxf"]
+[ext_resource type="Script" path="res://scripts/main_pause.gd" id="1_wr43w"]
+[ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="2_cn3gw"]
 
 [node name="MainPause" type="MarginContainer"]
 anchors_preset = 15
@@ -13,7 +13,7 @@ theme_override_constants/margin_left = 360
 theme_override_constants/margin_top = 120
 theme_override_constants/margin_right = 360
 theme_override_constants/margin_bottom = 120
-script = ExtResource("1_diw61")
+script = ExtResource("1_wr43w")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
@@ -37,7 +37,7 @@ theme_override_constants/separation = 340
 [node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("1_pbkxf")
+theme_override_fonts/font = ExtResource("2_cn3gw")
 theme_override_font_sizes/font_size = 36
 text = "3D Demo"
 horizontal_alignment = 1

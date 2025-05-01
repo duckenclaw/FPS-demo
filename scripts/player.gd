@@ -9,8 +9,10 @@ extends CharacterBody3D
 @onready var secondary_weapon_gunpoint: Node3D = $CameraContainer/FirstPersonCamera/WeaponPivot/Gun/Gunpoint
 @onready var crosshair_raycast: RayCast3D = $CameraContainer/FirstPersonCamera/WeaponPivot/CrosshairRaycast
 @onready var hud: Control = $HUD/SubViewportContainer/SubViewport/HudUI
+@onready var item_detector_raycast: RayCast3D = $CameraContainer/FirstPersonCamera/RayCast3D
 
 @onready var projectile_scene = preload("res://scenes/bullet.tscn")
+@onready var world_item_scene = preload("res://scenes/world_item.tscn")
 
 const MAX_HP: int = 100
 const SPEED: float = 5.0
@@ -85,12 +87,18 @@ var lastYVelocity: float
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+# Item interaction
+var highlighted_item = null
+
 func _ready():
 	hp = MAX_HP
 	hud.max_health = MAX_HP
 	hud.update_health(hp)
 	hud.update_dash(dash_uses)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	# Connect to inventory signals
+	hud.connect("inventory_item_dropped", Callable(self, "_on_inventory_item_dropped"))
 
 func _input(event):
 	handle_camera_input(event)
@@ -120,6 +128,9 @@ func _physics_process(delta):
 		move(delta)
 
 	move_and_slide()
+	
+	# Update item detection
+	update_item_detection()
 
 # Handle camera input
 func handle_camera_input(event):
@@ -152,6 +163,13 @@ func handle_movement_input(event):
 
 # Handle sprinting, crouching, and dash input
 func handle_misc_input():
+	if Input.is_action_pressed("Inventory"):
+		hud.toggle_inventory()
+	
+	# Handle item interaction
+	if Input.is_action_pressed("Interact") and Engine.time_scale != 0:
+		interact_with_item()
+	
 	if Input.is_action_just_pressed("ui_cancel"):
 		hud.toggle_pause()
 
@@ -304,7 +322,7 @@ func determine_move_type() -> String:
 	var current_time = Time.get_ticks_msec() / 1000.0
 	
 	if check_circular_motion():
-		print("executed Swirl")
+		print("Animation not created yet: Swirl")
 		return "Swirl"
 	
 	# Check for thrust attack (Forward-Backward or Backward-Forward)
@@ -312,7 +330,7 @@ func determine_move_type() -> String:
 		var last_two = input_buffer.slice(-2)
 		if (last_two[0] == "W" and last_two[1] == "S") or \
 		   (last_two[0] == "S" and last_two[1] == "W"):
-			print("executed Thrust")
+			print("Animation not created yet: Thrust")
 			return "Thrust"
 	
 	# Check for directional attacks
@@ -321,7 +339,7 @@ func determine_move_type() -> String:
 			"W":
 				return "Upper Slash"
 			"S":
-				print("executed Bottom Slash")
+				print("Animation not created yet: Bottom Slash")
 				return "Bottom Slash"
 			"A":
 				return "Left Slash"
@@ -360,7 +378,6 @@ func take_damage(damage):
 		print(self.name + " took " + str(damage) + " damage")
 		print("HP: " + str(hp) + " - " + str(damage) + " = " + str(hp - damage))
 		hp = hp - damage
-		print("HP: " + str(MAX_HP) + "/" + str(hp))
 	hud.update_health(hp)
 
 func change_weapon():
@@ -453,3 +470,40 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "Shoot":
 		is_shooting = false
 		anim_player.play("Idle", 0.5)
+
+func update_item_detection():
+	var collider = item_detector_raycast.get_collider()
+		
+	if collider is WorldItem and collider != highlighted_item:
+		if highlighted_item:
+			highlighted_item.unhighlight()
+			
+			highlighted_item = collider
+			highlighted_item.highlight()
+	elif highlighted_item:
+		highlighted_item.unhighlight()
+		highlighted_item = null
+
+func interact_with_item():
+	var collision_object = item_detector_raycast.get_collider()
+	print(collision_object)
+	if collision_object is WorldItem:
+		var item_data = collision_object.interact_reaction()
+		
+		# Add to inventory
+		if hud.add_item_to_inventory(item_data):
+			# Remove from world if successfully added to inventory
+			collision_object.queue_free()
+			highlighted_item = null
+
+func _on_inventory_item_dropped(item, position):
+	# Create a world item at the player's position + forward direction
+	var world_item = world_item_scene.instantiate()
+	world_item.setup_from_item(item)
+	
+	# Place slightly in front of player
+	var spawn_pos = global_position + -firstPersonCamera.global_transform.basis.z * 1.5
+	spawn_pos.y = global_position.y - 0.5  # Slightly below eye level
+	
+	world_item.global_position = spawn_pos
+	get_tree().current_scene.add_child(world_item)

@@ -25,7 +25,6 @@ func take_damage(damage):
 	print(self.name + " took " + str(damage) + " damage")
 	print("HP: " + str(hp) + " - " + str(damage) + " = " + str(hp - damage))
 	hp = hp - damage
-	print("HP: " + str(hp) + "/" + str(MAX_HP))
 	if hp <= 0:
 		print("Died")
 		hp = 0
@@ -44,7 +43,6 @@ func _on_attack_timer_timeout():
 
 
 func _on_hitbox_body_entered(body):
-	print(body)
 	if body.is_in_group("player"):
 		if body.is_blocking:
 			anim_player.speed_scale = 0.25

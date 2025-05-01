@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://41niqnirikob"]
 
 [ext_resource type="Script" path="res://pause_menu.gd" id="1_1vndw"]
-[ext_resource type="PackedScene" uid="uid://cqx3f4ayahjmc" path="res://scenes/UI/Screens/main_pause.tscn" id="2_00ast"]
-[ext_resource type="PackedScene" uid="uid://2mivuge7xd21" path="res://scenes/UI/Screens/options_menu.tscn" id="3_5cgjc"]
+[ext_resource type="PackedScene" uid="uid://cqx3f4ayahjmc" path="res://scenes/UI/screens/main_pause.tscn" id="2_2nf4w"]
+[ext_resource type="PackedScene" uid="uid://2mivuge7xd21" path="res://scenes/UI/screens/options_menu.tscn" id="3_t4puo"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -13,10 +13,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1vndw")
 
-[node name="MainPause" parent="." instance=ExtResource("2_00ast")]
+[node name="MainPause" parent="." instance=ExtResource("2_2nf4w")]
 layout_mode = 1
 
-[node name="OptionsMenu" parent="." instance=ExtResource("3_5cgjc")]
+[node name="OptionsMenu" parent="." instance=ExtResource("3_t4puo")]
 visible = false
 layout_mode = 1
 
