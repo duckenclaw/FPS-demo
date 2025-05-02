@@ -2,9 +2,9 @@ extends Area3D
 class_name WorldItem
 
 var item_data: Item
-@export var item_resource: Resource =  load("res://resources/sword.tres")
-@onready var mesh_instance: MeshInstance3D = $Mesh
-@onready var collision_shape: CollisionShape3D = $Collider
+@export var item_resource: Resource
+var mesh_instance: MeshInstance3D
+var collision_shape: CollisionShape3D
 
 # For interaction highlighting
 var is_highlighted = false
@@ -12,10 +12,8 @@ var original_material = null
 var highlight_material = null
 
 func _ready():
-	# Set up collision
-	collision_shape.shape = BoxShape3D.new()
-	
-	setup_from_item(item_resource)
+	if item_data == null and item_resource:
+		setup_from_item(item_resource)
 	
 	# Set up interaction
 	input_ray_pickable = true
@@ -28,7 +26,10 @@ func _ready():
 	highlight_material.emission_energy = 0.5
 
 func setup_from_item(item: Item):
+	mesh_instance = $Mesh
+	collision_shape = $Collider
 	item_data = item
+	item_resource = item
 	
 	# Load the model
 	var model = item.model

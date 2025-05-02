@@ -4,7 +4,7 @@
 [ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="2_mjp6f"]
 [ext_resource type="Texture2D" uid="uid://dyvgo2i235qnm" path="res://assets/images/crosshair.png" id="3_fmqnj"]
 [ext_resource type="PackedScene" uid="uid://41niqnirikob" path="res://scenes/UI/pause_menu.tscn" id="3_xtsx0"]
-[ext_resource type="PackedScene" uid="uid://cglixm51rpvos" path="res://scenes/UI/screens/inventory.tscn" id="4_yid6n"]
+[ext_resource type="PackedScene" uid="uid://cglixm51rpvos" path="res://scenes/UI/Screens/inventory.tscn" id="4_yid6n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vvypr"]
 bg_color = Color(0.219608, 0.00784314, 0.0156863, 1)

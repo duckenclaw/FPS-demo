@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://cfwyi5t8u348j"]
 
 [ext_resource type="Texture2D" uid="uid://du8aj5v45i4ix" path="res://icon.png" id="1_1c7qh"]
-[ext_resource type="ArrayMesh" uid="uid://bjxsflj1uxlmu" path="res://assets/models/sci-fi-sword.res" id="2_jf2n8"]
+[ext_resource type="ArrayMesh" uid="uid://d2kqapxqvrj53" path="res://assets/models/sci-fi-pistol.res" id="2_lu1mv"]
 [ext_resource type="Script" path="res://scripts/item.gd" id="3_l8odh"]
 
 [resource]
@@ -10,5 +10,5 @@ script = ExtResource("3_l8odh")
 name = "Unnamed"
 size = Vector2i(1, 1)
 icon = ExtResource("1_1c7qh")
-model = ExtResource("2_jf2n8")
+model = ExtResource("2_lu1mv")
 description = "No description available."

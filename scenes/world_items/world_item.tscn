@@ -1,16 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://cexnvnhvwybe5"]
+[gd_scene load_steps=3 format=3 uid="uid://cexnvnhvwybe5"]
 
 [ext_resource type="Script" path="res://scripts/world_item.gd" id="1_ce6mp"]
-[ext_resource type="Resource" uid="uid://cfwyi5t8u348j" path="res://resources/item.tres" id="2_wv8ty"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_laru1"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_mclct"]
 
 [node name="WorldItem" type="Area3D"]
 script = ExtResource("1_ce6mp")
-item_resource = ExtResource("2_wv8ty")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.5, 2.08165e-12)
-shape = SubResource("SphereShape3D_laru1")
+shape = SubResource("BoxShape3D_mclct")

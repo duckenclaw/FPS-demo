@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://d14l01a4sukoa"]
+[gd_scene load_steps=13 format=3 uid="uid://d14l01a4sukoa"]
 
 [ext_resource type="Sky" uid="uid://qlmrokfcnlcu" path="res://nebula_sky.tres" id="1_2fxfs"]
-[ext_resource type="PackedScene" uid="uid://by753mq35ds4q" path="res://scenes/world_items/sword_item.tscn" id="2_xdh28"]
 
 [sub_resource type="Environment" id="Environment_cd3k1"]
 background_mode = 2
@@ -98,6 +97,3 @@ mesh = SubResource("PrismMesh_0qmpt")
 [node name="Collider" type="CollisionShape3D" parent="Ramp"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.12238e-23, 0, -1.12238e-23, 1, 2.08165e-12, 1.025, 2.08165e-12)
 shape = SubResource("ConvexPolygonShape3D_62sh1")
-
-[node name="WorldItem" parent="." instance=ExtResource("2_xdh28")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2.08165e-12, -5)

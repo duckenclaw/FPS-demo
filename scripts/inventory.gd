@@ -33,7 +33,7 @@ func setup_grid():
 	grid_container.columns = grid_columns
 	
 	# Create empty slots
-	for i in range(grid_columns * grid_rows):  # 5 rows by default
+	for i in range(grid_columns * grid_rows):
 		var slot = create_inventory_slot()
 		grid_container.add_child(slot)
 
@@ -44,8 +44,7 @@ func create_inventory_slot():
 	slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	slot.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
 	slot.texture = preload("res://assets/images/inventory_slot.png")
-	slot.set_meta("grid_position", Vector2i(grid_container.get_child_count() % grid_columns, 
-											grid_container.get_child_count() / grid_columns))
+	slot.set_meta("grid_position", Vector2i(grid_container.get_child_count() % grid_columns, grid_container.get_child_count() / grid_columns))
 	
 	# Add a script if needed for hover effects
 	# var script = load("res://scripts/inventory_slot.gd")
@@ -89,9 +88,11 @@ func update_drag_position(position):
 
 func start_drag(item, start_position):
 	if dragged_item != null:
+		print("dragged_item != null")
 		return
 		
 	dragged_item = item
+	print(dragged_item.name)
 	drag_offset = start_position - item.global_position
 	
 	# Remove from grid and add to preview
@@ -107,7 +108,7 @@ func start_drag(item, start_position):
 	# Set up drag preview
 	drag_preview.add_child(item)
 	item.position = Vector2.ZERO
-	update_drag_position(start_position)
+	update_drag_position(get_global_mouse_position())
 	drag_preview.visible = true
 
 func drop_item(drop_position):
@@ -179,6 +180,8 @@ func place_item(inv_item, grid_position):
 	# Add to grid container
 	grid_container.add_child(inv_item)
 	
+	print(grid_position)
+	
 	# Position item
 	var slot_pos = grid_to_pixel(grid_position)
 	inv_item.position = slot_pos
@@ -190,6 +193,7 @@ func grid_to_pixel(grid_pos):
 func add_item(item):
 	# Try to find a position for the item
 	var position = find_position_for_item(item)
+	print(position)
 	if position == null:
 		return false  # Inventory full
 		
@@ -210,7 +214,7 @@ func create_inventory_item(item, grid_position):
 
 func find_position_for_item(item):
 	# Try to find a free position for the item
-	for y in range(5):  # 5 rows
+	for y in range(grid_rows):  # 5 rows
 		for x in range(grid_columns):
 			var pos = Vector2i(x, y)
 			if can_place_item_at(item, pos):
@@ -222,3 +226,8 @@ func toggle():
 	visible = !visible
 	drag_preview.visible = false
 	dragged_item = null
+	
+func update_grid():
+	for inventory_item in inventory_items:
+		var slot_pos = grid_to_pixel(inventory_item.grid_position)
+		inventory_item.position = slot_pos

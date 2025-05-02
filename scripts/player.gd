@@ -497,13 +497,12 @@ func interact_with_item():
 			highlighted_item = null
 
 func _on_inventory_item_dropped(item, position):
-	# Create a world item at the player's position + forward direction
 	var world_item = world_item_scene.instantiate()
 	world_item.setup_from_item(item)
-	
+
 	# Place slightly in front of player
 	var spawn_pos = global_position + -firstPersonCamera.global_transform.basis.z * 1.5
 	spawn_pos.y = global_position.y - 0.5  # Slightly below eye level
-	
+
 	world_item.global_position = spawn_pos
 	get_tree().current_scene.add_child(world_item)

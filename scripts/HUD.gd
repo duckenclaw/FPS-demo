@@ -44,6 +44,7 @@ func toggle_pause():
 
 func toggle_inventory():
 	inventory.visible = !inventory.visible
+	inventory.update_grid()
 	
 	# Only capture mouse when inventory is open
 	if inventory.visible:
@@ -69,3 +70,4 @@ func _on_inventory_item_dropped(item, position):
 
 func add_item_to_inventory(item):
 	return inventory.add_item(item)
+	

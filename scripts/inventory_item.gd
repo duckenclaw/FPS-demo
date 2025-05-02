@@ -48,7 +48,6 @@ func _input(event):
 			var rect = Rect2(global_position, custom_minimum_size)
 			if rect.has_point(event.global_position):
 				emit_signal("drag_started", self, event.global_position)
-				get_viewport().set_input_as_handled()
 
 func get_item() -> Item:
 	return item_data 
