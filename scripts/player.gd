@@ -464,7 +464,7 @@ func _on_primary_weapon_hitbox_entered(area):
 		area.take_damage(MELEE_DAMAGE)
 
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name in ["Right Slash", "Left Slash", "Upper Slash"]:
+	if anim_name in ["Right Slash", "Left Slash", "Upper Slash", "Bottom Slash", "Thrust", "Swirl"]:
 		primary_weapon_hitbox.monitoring = false
 		anim_player.play("Idle", 0.5)
 	if anim_name == "Shoot":

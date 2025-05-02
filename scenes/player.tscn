@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dl28g653atb6k"]
+[gd_scene load_steps=21 format=3 uid="uid://dl28g653atb6k"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x0crq"]
 [ext_resource type="ArrayMesh" uid="uid://bjxsflj1uxlmu" path="res://assets/models/sci-fi-sword.res" id="2_1kmoi"]
@@ -321,15 +321,77 @@ tracks/1/keys = {
 "values": [Vector3(1.25, -1, -0.5), Vector3(0.5, -0.25, -0.75), Vector3(0.5, -0.25, -0.1), Vector3(0.5, -0.25, -0.1)]
 }
 
+[sub_resource type="Animation" id="Animation_2qtg3"]
+resource_name = "Bottom Slash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraContainer/FirstPersonCamera/WeaponPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.25, -1, -0.5), Vector3(0.39066, -0.5, -0.75), Vector3(0.39066, -0.5, -0.75)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraContainer/FirstPersonCamera/WeaponPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(3.48787e-16, 3.48787e-16, 3.48787e-16), Vector3(3.48787e-16, 3.48787e-16, -2.35619), Vector3(2.58658, -0.115192, -3.97586)]
+}
+
+[sub_resource type="Animation" id="Animation_w4f13"]
+resource_name = "Swirl"
+
+[sub_resource type="Animation" id="Animation_tmmfg"]
+resource_name = "Thrust"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraContainer/FirstPersonCamera/WeaponPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.25, -1, -0.5), Vector3(0.5, -0.75, -0.5), Vector3(0.5, -0.75, -1.25)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraContainer/FirstPersonCamera/WeaponPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(3.48787e-16, 3.48787e-16, 3.48787e-16), Vector3(-1.13446, -0.0872665, 3.48787e-16), Vector3(-1.13446, -0.0872665, 3.48787e-16)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cnt6q"]
 _data = {
 "Block": SubResource("Animation_nqc6p"),
+"Bottom Slash": SubResource("Animation_2qtg3"),
 "Crouch": SubResource("Animation_1fr2c"),
 "Idle": SubResource("Animation_q4wc1"),
 "Left Slash": SubResource("Animation_kqok1"),
 "RESET": SubResource("Animation_uk7ky"),
 "Right Slash": SubResource("Animation_qjk1q"),
 "Shoot": SubResource("Animation_bix0s"),
+"Swirl": SubResource("Animation_w4f13"),
+"Thrust": SubResource("Animation_tmmfg"),
 "Uncrouch": SubResource("Animation_6fm5k"),
 "Upper Slash": SubResource("Animation_qgikc")
 }
@@ -357,7 +419,7 @@ autoplay = "Idle"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.75, 2.08165e-12)
 
 [node name="FirstPersonCamera" type="Camera3D" parent="CameraContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0, 2.08165e-12)
 cull_mask = 524287
 fov = 90.0
 
@@ -365,7 +427,7 @@ fov = 90.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, -1, -0.5)
 
 [node name="Sword" type="Node3D" parent="CameraContainer/FirstPersonCamera/WeaponPivot"]
-transform = Transform3D(0.958333, -0.272453, 0.0858316, 0.254887, 0.951251, 0.173648, -0.128958, -0.144535, 0.98106, -0.15, 0.5, -0.1)
+transform = Transform3D(0.958333, -0.272453, 0.0858313, 0.254887, 0.951251, 0.173648, -0.128958, -0.144535, 0.98106, -0.15, 0.5, -0.1)
 
 [node name="Mesh" type="MeshInstance3D" parent="CameraContainer/FirstPersonCamera/WeaponPivot/Sword"]
 transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
@@ -392,11 +454,6 @@ skeleton = NodePath("../..")
 
 [node name="Gunpoint" type="Node3D" parent="CameraContainer/FirstPersonCamera/WeaponPivot/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.527476, -1.91559)
-
-[node name="CrosshairRaycast" type="RayCast3D" parent="CameraContainer/FirstPersonCamera/WeaponPivot"]
-transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
-target_position = Vector3(2.08165e-12, 2.08165e-12, -50)
-hit_back_faces = false
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraContainer/FirstPersonCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0, 2.08165e-12)
