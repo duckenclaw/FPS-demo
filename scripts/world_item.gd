@@ -33,17 +33,7 @@ func setup_from_item(item: Item):
 	# Load the model
 	var model = item.model
 	
-	if model is Node3D:
-		# If the model is a complete Node3D scene
-		mesh_instance.mesh = model
-	elif model is Mesh:
-		# If the model is just a mesh
-		mesh_instance.mesh = model
-		# Store original material for highlighting
-		if mesh_instance.get_surface_override_material(0) != null:
-			original_material = mesh_instance.get_surface_override_material(0)
-		elif mesh_instance.mesh.surface_get_material(0) != null:
-			original_material = mesh_instance.mesh.surface_get_material(0)
+	mesh_instance.mesh = model
 	
 	# Set up collision shape based on mesh bounds
 	var aabb = get_item_aabb()

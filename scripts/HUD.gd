@@ -31,15 +31,16 @@ func update_dash(dashes):
 	dash_label.text = str(dashes)
 	
 func toggle_pause():
-	toggle_mouse_mode()
-	if Engine.time_scale == 0:
-		Engine.time_scale = 1
-		print("unpaused")
-		pause_menu.visible = false
-	else:
-		Engine.time_scale = 0
-		print("paused")
-		pause_menu.visible = true
+	if not inventory.visible:
+		if Engine.time_scale == 0:
+			toggle_mouse_mode()
+			Engine.time_scale = 1
+			print("unpaused")
+			pause_menu.visible = false
+		else:
+			Engine.time_scale = 0
+			print("paused")
+			pause_menu.visible = true
 
 func toggle_inventory():
 	inventory.visible = !inventory.visible

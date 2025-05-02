@@ -12,7 +12,7 @@ extends CharacterBody3D
 @onready var item_detector_raycast: RayCast3D = $CameraContainer/FirstPersonCamera/RayCast3D
 
 @onready var projectile_scene = preload("res://scenes/bullet.tscn")
-@onready var world_item_scene = preload("res://scenes/world_item.tscn")
+@onready var world_item_scene = preload("res://scenes/world_items/world_item.tscn")
 
 const MAX_HP: int = 100
 const SPEED: float = 5.0
