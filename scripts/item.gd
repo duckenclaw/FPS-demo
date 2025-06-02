@@ -4,7 +4,7 @@ class_name Item
 @export var name: String = "Unnamed"
 @export var size: Vector2i = Vector2i(1, 1) # Width x Height in grid slots
 @export var icon: Texture2D = load("res://icon.png")
-@export var model = load("res://assets/models/sci-fi-pistol.res")
+@export var model: Mesh = load("res://assets/models/sci-fi-pistol.res")
 @export var description: String = "No description available."
 
 # Optional functions for special item behavior

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cqx3f4ayahjmc"]
 
-[ext_resource type="Script" path="res://scripts/main_pause.gd" id="1_wr43w"]
+[ext_resource type="Script" path="res://scripts/ui/main_pause.gd" id="1_wr43w"]
 [ext_resource type="SystemFont" uid="uid://cuht55tbb5ci8" path="res://assets/styles/pixel_font.tres" id="2_cn3gw"]
 
 [node name="MainPause" type="MarginContainer"]

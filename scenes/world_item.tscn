@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://cexnvnhvwybe5"]
 
-[ext_resource type="Script" path="res://scripts/world_item.gd" id="1_ce6mp"]
+[ext_resource type="Script" path="res://scripts/world_item.gd" id="1_4hric"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mclct"]
 
 [node name="WorldItem" type="Area3D"]
-script = ExtResource("1_ce6mp")
+script = ExtResource("1_4hric")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 

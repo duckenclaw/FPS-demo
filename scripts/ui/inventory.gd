@@ -76,9 +76,10 @@ func rotate_dragged_item():
 	# Swap width and height
 	var item_size = dragged_item.get_item().size
 	dragged_item.get_item().size = Vector2i(item_size.y, item_size.x)
+	dragged_item.rotate_item(true)
 	
 	# Update the visual representation
-	dragged_item.update_texture()
+	dragged_item.update_texture(false)
 	
 	item_rotation_in_progress = false
 
@@ -207,7 +208,7 @@ func add_item(item):
 	return true
 
 func create_inventory_item(item, grid_position):
-	var inv_item = preload("res://scripts/inventory_item.gd").new()
+	var inv_item = preload("res://scripts/ui/inventory_item.gd").new()
 	inv_item.setup(item, grid_position, grid_cell_size)
 	inv_item.connect("drag_started", Callable(self, "start_drag"))
 	return inv_item

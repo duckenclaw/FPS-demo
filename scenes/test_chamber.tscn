@@ -1,0 +1,20 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfgeeunlowxmp"]
+
+[ext_resource type="PackedScene" uid="uid://d14l01a4sukoa" path="res://scenes/test_environment.tscn" id="1_3rpmo"]
+[ext_resource type="PackedScene" uid="uid://dl28g653atb6k" path="res://scenes/player.tscn" id="2_n6fni"]
+[ext_resource type="PackedScene" uid="uid://gksvg4e1qu24" path="res://scenes/alien.tscn" id="3_tgwwl"]
+[ext_resource type="PackedScene" uid="uid://cexnvnhvwybe5" path="res://scenes/world_item.tscn" id="4_4t1mh"]
+[ext_resource type="Resource" uid="uid://bysydpfxiu7th" path="res://resources/sword.tres" id="5_lan83"]
+
+[node name="TestChamber" type="Node3D"]
+
+[node name="QasmokeEnvironment" parent="." instance=ExtResource("1_3rpmo")]
+
+[node name="Player" parent="." instance=ExtResource("2_n6fni")]
+
+[node name="Alien" parent="." instance=ExtResource("3_tgwwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.08165e-12, -7.5)
+
+[node name="Sword" parent="." instance=ExtResource("4_4t1mh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.08165e-12, -7.5)
+item_resource = ExtResource("5_lan83")

@@ -38,6 +38,7 @@ func toggle_pause():
 			print("unpaused")
 			pause_menu.visible = false
 		else:
+			toggle_mouse_mode()
 			Engine.time_scale = 0
 			print("paused")
 			pause_menu.visible = true

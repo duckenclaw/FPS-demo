@@ -1,6 +1,6 @@
 extends MarginContainer
 
-@onready var start_scene = preload("res://scenes/qasmoke.tscn")
+@onready var start_scene = preload("res://scenes/test_chamber.tscn")
 
 signal open_options()
 

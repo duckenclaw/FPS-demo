@@ -19,9 +19,9 @@ func setup(item: Item, position: Vector2i, size: int):
 	
 	# Set the control size based on item dimensions
 	custom_minimum_size = Vector2(item.size.x * cell_size, item.size.y * cell_size)
-	update_texture()
+	update_texture(false)
 
-func update_texture():
+func update_texture(is_rotated):
 	# Remove any existing texture
 	for child in get_children():
 		child.queue_free()
@@ -32,6 +32,8 @@ func update_texture():
 	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	texture_rect.texture = item_data.icon
 	texture_rect.size = Vector2(item_data.size.x * cell_size, item_data.size.y * cell_size)
+	if is_rotated:
+		texture_rect.rotation_degrees = int(texture_rect.rotation_degrees + 90) % 360
 	add_child(texture_rect)
 	
 	# Add item name label
@@ -51,3 +53,6 @@ func _input(event):
 
 func get_item() -> Item:
 	return item_data 
+
+func rotate_item():
+	update_texture(true) 
