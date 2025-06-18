@@ -10,15 +10,16 @@ var cell_size: int
 func _ready():
 	# Add mouse input handling
 	mouse_filter = Control.MOUSE_FILTER_PASS
-	set_process_input(true)
+	set_process_input(false)  # We'll handle input in _gui_input instead
 
-func setup(item: Item, position: Vector2i, size: int):
+func setup(item: Item, position: Vector2i, grid_size: int):
 	item_data = item
 	grid_position = position
-	cell_size = size
+	cell_size = grid_size
 	
 	# Set the control size based on item dimensions
 	custom_minimum_size = Vector2(item.size.x * cell_size, item.size.y * cell_size)
+	size = custom_minimum_size  # Also set the actual size
 	update_texture(false)
 
 func update_texture(is_rotated):
@@ -44,15 +45,14 @@ func update_texture(is_rotated):
 	label.size = Vector2(item_data.size.x * cell_size, item_data.size.y * cell_size)
 	add_child(label)
 
-func _input(event):
+func _gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var rect = Rect2(global_position, custom_minimum_size)
-			if rect.has_point(event.global_position):
-				emit_signal("drag_started", self, event.global_position)
+			emit_signal("drag_started", self, event.global_position)
+			accept_event()  # Mark event as handled
 
 func get_item() -> Item:
 	return item_data 
 
-func rotate_item():
-	update_texture(true) 
+func rotate_item(is_rotated = true):
+	update_texture(is_rotated) 

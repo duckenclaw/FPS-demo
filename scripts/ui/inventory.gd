@@ -19,10 +19,12 @@ var item_rotation_in_progress = false
 # References
 @onready var grid_container = $Margins/GridContainer
 @onready var drag_preview = $Margins/DragPreview
+@onready var items_container = $Margins/ItemsContainer  # New container for items
 
 func _ready():
 	# Initialize the inventory grid
 	setup_grid()
+	setup_items_container()
 	drag_preview.visible = false
 	
 	# Connect to input events for drag handling
@@ -36,6 +38,20 @@ func setup_grid():
 	for i in range(grid_columns * grid_rows):
 		var slot = create_inventory_slot()
 		grid_container.add_child(slot)
+
+func setup_items_container():
+	# Create items container if it doesn't exist
+	if not has_node("Margins/ItemsContainer"):
+		items_container = Control.new()
+		items_container.name = "ItemsContainer"
+		items_container.mouse_filter = Control.MOUSE_FILTER_PASS  # Allow mouse input
+		$Margins.add_child(items_container)
+		# Move it above the grid container
+		$Margins.move_child(items_container, $Margins.get_child_count() - 1)
+	
+	# Position items container to match grid container
+	items_container.position = grid_container.position
+	items_container.size = grid_container.size
 
 func create_inventory_slot():
 	var slot = TextureRect.new()
@@ -178,18 +194,15 @@ func place_item(inv_item, grid_position):
 			var pos = Vector2i(grid_position.x + x, grid_position.y + y)
 			grid_positions[pos] = inv_item
 	
-	# Add to grid container
-	grid_container.add_child(inv_item)
-	
-	print(grid_position)
+	# Add to items container instead of grid container
+	items_container.add_child(inv_item)
 	
 	# Position item
-	var slot_pos = grid_to_pixel(grid_position)
+	var slot_pos = grid_to_pixel(inv_item.grid_position)
 	inv_item.position = slot_pos
 
 func grid_to_pixel(grid_pos):
-	return Vector2(grid_pos.x * (grid_cell_size + grid_padding), 
-				   grid_pos.y * (grid_cell_size + grid_padding))
+	return Vector2(grid_pos.x * (grid_cell_size + grid_padding), grid_pos.y * (grid_cell_size + grid_padding))
 
 func add_item(item):
 	# Try to find a position for the item
@@ -208,6 +221,7 @@ func add_item(item):
 	return true
 
 func create_inventory_item(item, grid_position):
+	print(grid_position)
 	var inv_item = preload("res://scripts/ui/inventory_item.gd").new()
 	inv_item.setup(item, grid_position, grid_cell_size)
 	inv_item.connect("drag_started", Callable(self, "start_drag"))

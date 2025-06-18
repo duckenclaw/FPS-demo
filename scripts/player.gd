@@ -330,7 +330,6 @@ func determine_move_type() -> String:
 		var last_two = input_buffer.slice(-2)
 		if (last_two[0] == "W" and last_two[1] == "S") or \
 		   (last_two[0] == "S" and last_two[1] == "W"):
-			print("Animation not created yet: Thrust")
 			return "Thrust"
 	
 	# Check for directional attacks
@@ -339,7 +338,6 @@ func determine_move_type() -> String:
 			"W":
 				return "Upper Slash"
 			"S":
-				print("Animation not created yet: Bottom Slash")
 				return "Bottom Slash"
 			"A":
 				return "Left Slash"
@@ -486,7 +484,6 @@ func update_item_detection():
 
 func interact_with_item():
 	var collision_object = item_detector_raycast.get_collider()
-	print(collision_object)
 	if collision_object is WorldItem:
 		var item_data = collision_object.interact_reaction()
 		
