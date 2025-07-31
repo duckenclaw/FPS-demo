@@ -8,16 +8,21 @@ extends Control
 
 @onready var pause_menu: Control = $PauseMenu
 @onready var inventory: Control = $Inventory
+@onready var character_sheet: Control = $CharacterSheet
+@onready var equipment_manager: EquipmentManager = $EquipmentManager
 @onready var crosshair: TextureRect = $Margins/CrosshairContainer/CrosshairImage
 
 signal inventory_toggled(visible)
 signal inventory_item_dropped(item, position)
+signal character_sheet_toggled(visible)
 
 var max_health: int = 100
 
 func _ready():
 	inventory.connect("item_dropped", Callable(self, "_on_inventory_item_dropped"))
 	inventory.visible = false
+	
+	character_sheet.visible = false
 	
 	# Ensure crosshair is visible
 	crosshair.visible = true
@@ -71,4 +76,20 @@ func _on_inventory_item_dropped(item, position):
 
 func add_item_to_inventory(item):
 	return inventory.add_item(item)
+
+func toggle_character_sheet():
+	character_sheet.visible = !character_sheet.visible
+	
+	# Only capture mouse when character sheet is open
+	if character_sheet.visible:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		Engine.time_scale = 0  # Pause the game
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		Engine.time_scale = 1  # Unpause the game
+	
+	emit_signal("character_sheet_toggled", character_sheet.visible)
+
+func get_equipment_manager() -> EquipmentManager:
+	return equipment_manager
 	

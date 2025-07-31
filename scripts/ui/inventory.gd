@@ -2,6 +2,7 @@ extends Control
 class_name Inventory
 
 signal item_dropped(item, world_position)
+signal item_equipped(item, slot)
 
 # Grid settings
 @export var grid_columns = 6
@@ -16,6 +17,10 @@ var dragged_item = null
 var drag_offset = Vector2.ZERO
 var item_rotation_in_progress = false
 
+# Equipment system references
+var equipment_manager: EquipmentManager
+var character_sheet: CharacterSheet
+
 # References
 @onready var grid_container = $Margins/GridContainer
 @onready var drag_preview = $Margins/DragPreview
@@ -29,6 +34,10 @@ func _ready():
 	
 	# Connect to input events for drag handling
 	get_viewport().connect("gui_focus_changed", Callable(self, "_on_gui_focus_changed"))
+	
+	# Find equipment system references
+	equipment_manager = get_node("../EquipmentManager")
+	character_sheet = get_node("../CharacterSheet")
 
 func setup_grid():
 	# Configure the grid container
@@ -225,6 +234,11 @@ func create_inventory_item(item, grid_position):
 	var inv_item = preload("res://scripts/ui/inventory_item.gd").new()
 	inv_item.setup(item, grid_position, grid_cell_size)
 	inv_item.connect("drag_started", Callable(self, "start_drag"))
+	
+	# Add right-click context menu for equippable items
+	if item.can_be_equipped:
+		inv_item.connect("gui_input", Callable(self, "_on_item_input").bind(inv_item))
+	
 	return inv_item
 
 func find_position_for_item(item):
@@ -246,3 +260,41 @@ func update_grid():
 	for inventory_item in inventory_items:
 		var slot_pos = grid_to_pixel(inventory_item.grid_position)
 		inventory_item.position = slot_pos
+
+func _on_item_input(event: InputEvent, inv_item: InventoryItem):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			_show_item_context_menu(inv_item, event.global_position)
+
+func _show_item_context_menu(inv_item: InventoryItem, position: Vector2):
+	var item = inv_item.get_item()
+	if not item.can_be_equipped or not equipment_manager:
+		return
+	
+	# For now, just try to equip the item directly
+	if equipment_manager.can_equip_item(item):
+		_try_equip_item(inv_item)
+	else:
+		print("Cannot equip item: ", item.name)
+
+func _try_equip_item(inv_item: InventoryItem):
+	var item = inv_item.get_item()
+	
+	if equipment_manager.equip_item(item):
+		# Remove from inventory
+		_remove_inventory_item(inv_item)
+		emit_signal("item_equipped", item, item.equipment_slot)
+
+func _remove_inventory_item(inv_item: InventoryItem):
+	# Remove from grid positions
+	var item_size = inv_item.get_item().size
+	var grid_pos = inv_item.grid_position
+	
+	for x in range(item_size.x):
+		for y in range(item_size.y):
+			var pos = Vector2i(grid_pos.x + x, grid_pos.y + y)
+			grid_positions.erase(pos)
+	
+	# Remove from inventory
+	inventory_items.erase(inv_item)
+	inv_item.queue_free()

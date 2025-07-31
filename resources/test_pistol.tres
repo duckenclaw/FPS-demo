@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponItem" load_steps=4 format=3 uid="uid://biny0qd3o4dtn"]
+
+[ext_resource type="Texture2D" uid="uid://du8aj5v45i4ix" path="res://icon.png" id="1_pistol"]
+[ext_resource type="Script" path="res://scripts/weapon_item.gd" id="2_weapon"]
+[ext_resource type="ArrayMesh" uid="uid://d2kqapxqvrj53" path="res://assets/models/sci-fi-pistol.res" id="3_mesh"]
+
+[resource]
+script = ExtResource("2_weapon")
+weapon_type = 1
+damage = 25.0
+attack_speed = 0.8
+accuracy = 0.9
+rpm = 300.0
+magazine_size = 15
+reload_time = 1.5
+is_automatic = false
+name = "Plasma Pistol"
+description = "A compact energy weapon perfect for close quarters combat."
+size = Vector2i(1, 1)
+icon = ExtResource("1_pistol")
+model = ExtResource("3_mesh")
+weight = 1.2
+price = 100
+category = "weapon"
+can_be_equipped = true
+equipment_slot = "right_hand"
+is_two_handed = false

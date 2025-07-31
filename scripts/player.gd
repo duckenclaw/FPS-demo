@@ -99,6 +99,11 @@ func _ready():
 	
 	# Connect to inventory signals
 	hud.connect("inventory_item_dropped", Callable(self, "_on_inventory_item_dropped"))
+	
+	# Connect to equipment system
+	var equipment_manager = hud.get_equipment_manager()
+	if equipment_manager:
+		equipment_manager.connect("stats_updated", Callable(self, "_on_equipment_stats_updated"))
 
 func _input(event):
 	handle_camera_input(event)
@@ -163,8 +168,12 @@ func handle_movement_input(event):
 
 # Handle sprinting, crouching, and dash input
 func handle_misc_input():
-	if Input.is_action_pressed("Inventory"):
+	if Input.is_action_just_pressed("Inventory"):
 		hud.toggle_inventory()
+	
+	# Handle character sheet toggle (C key)
+	if Input.is_action_just_pressed("ui_accept"):  # TODO: Add proper key binding
+		hud.toggle_character_sheet()
 	
 	# Handle item interaction
 	if Input.is_action_pressed("Interact") and Engine.time_scale != 0:
@@ -503,3 +512,20 @@ func _on_inventory_item_dropped(item, position):
 
 	world_item.global_position = spawn_pos
 	get_tree().current_scene.add_child(world_item)
+
+func _on_equipment_stats_updated(stats: Dictionary):
+	# Apply equipment bonuses to player stats
+	var equipment_manager = hud.get_equipment_manager()
+	if not equipment_manager:
+		return
+	
+	# Apply defense bonuses
+	var defense_bonus = equipment_manager.get_stat_value("defense")
+	# TODO: Apply defense to damage calculation
+	
+	# Apply weapon bonuses (update current weapon damage)
+	var equipped_weapon = equipment_manager.get_equipped_item("right_hand")
+	if equipped_weapon and equipped_weapon is WeaponItem:
+		# Update weapon damage for combat system
+		var weapon_damage = equipment_manager.get_stat_value("damage")
+		# TODO: Update combat system with new weapon stats

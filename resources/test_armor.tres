@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EquipmentItem" load_steps=3 format=3 uid="uid://cgxfir2nqjk4c"]
+
+[ext_resource type="Texture2D" uid="uid://du8aj5v45i4ix" path="res://icon.png" id="1_armor"]
+[ext_resource type="Script" path="res://scripts/equipment_item.gd" id="2_equipment"]
+
+[resource]
+script = ExtResource("2_equipment")
+equipment_type = 1
+armor_type = 1
+defense = 15
+additional_stats = {}
+name = "Combat Vest"
+description = "A lightweight protective vest that provides decent protection without hindering movement."
+size = Vector2i(2, 2)
+icon = ExtResource("1_armor")
+weight = 3.0
+price = 200
+category = "equipment"
+can_be_equipped = true
+equipment_slot = "body"
+is_two_handed = false
